@@ -16,14 +16,19 @@ const Auth = observer(() => {
 
   const click = async () => {
     try {
-      let data
-      data = isLogin ? await signin(email, password) : await signup(email, password)
+      let data;
+      if (isLogin) {
+        data = await signin(email, password);
+      } else {
+        data = await signup(email, password);
+      }
       user.setUser(user)
       user.setIsAuth(true)
       navigate(SHOP_ROUTE)
     } catch (e) {
       alert(e.response.data.message)
     }
+
   }
 
   return (

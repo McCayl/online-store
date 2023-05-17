@@ -2,6 +2,11 @@ import { Device, DeviceInfo } from '../models/models.js'
 import ApiError from '../error/ApiError.js'
 import { v4 } from 'uuid'
 import { resolve } from 'path'
+import path from 'path'
+import url from 'url';
+
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 class DeviceController {
     async get(req, res) {

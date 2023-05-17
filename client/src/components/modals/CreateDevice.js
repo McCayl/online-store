@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {observer} from 'mobx-react-lite'
 import { Context } from '../../index'
 import { Button, Modal, Form, Dropdown, Col, Row } from 'react-bootstrap'
+import { createDevice, fetchBrands, fetchTypes } from '../../http/deviceAPI'
 
 const CreateDevice = observer(({show, onHide}) => {
   const {device} = useContext(Context)
@@ -10,14 +11,20 @@ const CreateDevice = observer(({show, onHide}) => {
   const [file, setFile] = useState(null)
   const [info, setInfo] = useState([])
 
+  useEffect(() => {
+    fetchTypes().then(data => device.setTypes(data))
+    fetchBrands().then(data => device.setBrands(data))
+  }, [])
+  
   const addDevice = () => {
     const formData = new FormData()
     formData.append('name', name)
-    formData.append('price', `$(price)`)
-    formData.append('typeId', device.selectedType.id)
-    formData.append('brandId', device.selectedBrand.id)
+    formData.append('price', `${price}`)
     formData.append('img', file)
+    formData.append('brandId', device.selectedBrand.id)
+    formData.append('typeId', device.selectedType.id)
     formData.append('info', JSON.stringify(info))
+    createDevice(formData).then(data => onHide())
   }
 
   const addInfo = () => {

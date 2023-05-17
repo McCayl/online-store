@@ -1,22 +1,22 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Card, Col, Container, Image, Row } from 'react-bootstrap'
 import bigStar from '../assets/bigStar.png'
+import { fetchOneDevice } from '../http/deviceAPI'
+import { useParams } from 'react-router-dom'
 
 const DevicePage = () => {
-  const device = {id: 1, name: 'Gibson Les Paul Standard 50s Heritage Cherry Sunburst', price: 9999, rating: 5, img: 'https://images.musicstore.de/images/1280/gibson-les-paul-standard-50s-heritage-cherry-sunburst_1_GIT0049490-000.jpg'}
-  const info = [
-    {id: 1, title: 'Производитель', description: 'Gibson'},
-    {id: 2, title: 'Серия', description: 'Gibosn USA'},
-    {id: 3, title: 'Дизайн', description: 'Les Paul'},
-    {id: 4, title: 'Корпус', description: 'Красное дерево'},
-    {id: 5, title: 'Топ', description: 'Клен'}
-  ]
+  const [device, setDevice] = useState({ info: [] })
+  const { id } = useParams()
+  
+  useEffect(() => {
+    fetchOneDevice(id).then(data => setDevice(data))
+  }, [])
   
   return (
     <Container className='mt-3'>
       <Row>
         <Col md={4}>
-          <Image width={300} height={350} src={device.img}/>
+          <Image width={300} height={350} src={process.env.REACT_APP_API_URL + device.img}/>
         </Col>
         <Col className='d-flex flex-column align-items-center' md={4}>
           <h2>{device.name}</h2>
@@ -39,7 +39,7 @@ const DevicePage = () => {
       </Row>
       <Row className='d-flex flex-column mt-3'>
         <h1>Характеристики</h1>
-        {info.map((info, i) => 
+        {device.info.map((info, i) => 
           <Col key={info.id} style={{padding: 10, background: i % 2 === 0 ? 'lightgray' : 'transparent'}}> 
             {info.title} : {info.description}
           </Col>
