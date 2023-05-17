@@ -1,9 +1,9 @@
 import Router from 'express'
 const router = Router()
-import { get, create } from '../controllers/BrandController'
-import roleCheck from '../middleware/CheckRoleMiddleware'
+import BrandController from '../controllers/BrandController.js'
+import roleCheck from '../middleware/CheckRoleMiddleware.js'
 
-router.get('/', get)
-router.post('/', roleCheck('ADMIN'), create)
+router.get('/',  BrandController.get)
+router.post('/', roleCheck('ADMIN'), BrandController.create)
 
 export default router

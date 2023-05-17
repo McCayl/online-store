@@ -1,9 +1,9 @@
 import Router from 'express'
 const router = Router()
-import { get, create } from '../controllers/TypeController'
-import roleCheck from '../middleware/CheckRoleMiddleware'
+import TypeController from '../controllers/TypeController.js'
+import roleCheck from '../middleware/CheckRoleMiddleware.js'
 
-router.get('/', get)
-router.post('/', roleCheck('ADMIN'), create)
+router.get('/', TypeController.get)
+router.post('/', roleCheck('ADMIN'), TypeController.create)
 
 export default router

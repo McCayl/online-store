@@ -1,20 +1,20 @@
-require('dotenv').config()
-import express, { json, statics } from 'express'
-import { authenticate, sync } from './db'
-import models from './models/models'
+import express from 'express'
+import db from './db.js'
 import cors from 'cors'
+import path from 'path'
+import url from 'url';
 import fileUpload from 'express-fileupload'
-import { resolve } from 'path'
-import router from './routes/index'
-import errorHandler from './middleware/ErrorHandlingMiddleware'
+import router from './routes/index.js'
+import errorHandler from './middleware/ErrorHandlingMiddleware.js'
 
 const PORT = process.env.PORT || 10000
-
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app = express()
 app.use(cors())
 app.use(fileUpload({}))
-app.use(json())
-app.use(statics(resolve(__dirname, 'static')))
+app.use(express.json())
+app.use(express.static(path.resolve(__dirname, 'static')))
 app.use('/api/v1', router)
 
 //Миддлвэйр, кот обр ошибки импортируется ластовым
@@ -24,8 +24,8 @@ app.use(errorHandler)
 
 const launch = async () => {
     try {
-        await authenticate()
-        await sync()
+        await db.authenticate()
+        await db.sync()
         app.listen(PORT, () => console.log(`server successfully started ${PORT}`))
     } catch (e) {
         console.log(e)

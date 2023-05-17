@@ -1,10 +1,10 @@
 import Router from 'express'
 const router = Router()
-import { get, getOne, create } from '../controllers/DeviceController'
-import roleCheck from '../middleware/CheckRoleMiddleware'
+import DeviceController from '../controllers/DeviceController.js'
+import roleCheck from '../middleware/CheckRoleMiddleware.js'
 
-router.get('/', get)
-router.get('/:id', getOne)
-router.post('/', roleCheck('ADMIN'), create)
+router.get('/', DeviceController.get)
+router.get('/:id', DeviceController.getOne)
+router.post('/', roleCheck('ADMIN'), DeviceController.create)
 
 export default router

@@ -1,5 +1,5 @@
-import { Device, DeviceInfo } from '../models/models'
-import { badRequest } from '../error/ApiError'
+import { Device, DeviceInfo } from '../models/models.js'
+import ApiError from '../error/ApiError.js'
 import { v4 } from 'uuid'
 import { resolve } from 'path'
 
@@ -51,7 +51,7 @@ class DeviceController {
 
             return res.json(device)
         } catch(e) {
-            next(badRequest(e.message))
+            next(ApiError.badRequest(e.message))
         }
     }
 }

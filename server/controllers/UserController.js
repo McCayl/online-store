@@ -1,10 +1,10 @@
-import { sign } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import { hash, compareSync } from 'bcrypt'
-import { badRequest } from '../error/ApiError'
-import { User, Basket } from '../models/models'
+import ApiError from '../error/ApiError.js'
+import { User, Basket } from '../models/models.js'
 
 const generateJWT = (id, email, role) => {
-    return sign(
+    return jwt.sign(
         {id, email, role},
         process.env.SECRET_KEY,
         {expiresIn: '24h'}
@@ -16,10 +16,10 @@ class UserController {
         const {email, password, role} = req.body
         
         if (!email || !password)
-            return next(badRequest('Imvalid email or password'))
+            return next(ApiError.badRequest('Imvalid email or password'))
         const existed = await User.findOne({where: {email}})
         if (existed)
-            return next(badRequest('Email already exist'))
+            return next(ApiError.badRequest('Email already exist'))
         
         const encryptedPassword = await hash(password, 5)
         const user = await User.create({email, role, password: encryptedPassword})
@@ -34,10 +34,10 @@ class UserController {
         
         const user = await User.findOne({where: {email}})
         if (!user)
-            return next(badRequest('Email doesnt exist'))
+            return next(ApiError.badRequest('Email doesnt exist'))
         let comparePassword = compareSync(password, user.password)
         if (!comparePassword)
-            return next(badRequest('Invalid password'))
+            return next(ApiError.badRequest('Invalid password'))
         
         const token = generateJWT(user.id, user.email, user.role)
         return res.json({token})

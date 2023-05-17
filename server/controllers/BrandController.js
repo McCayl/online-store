@@ -1,4 +1,4 @@
-import { Brand } from '../models/models'
+import { Brand } from '../models/models.js'
 
 class BrandController {
     async get(req, res) {

@@ -1,10 +1,10 @@
 import Router from 'express'
 const router = Router()
-import { signup, signin, check } from '../controllers/UserController'
-import authMiddleware from '../middleware/AuthMiddleware'
+import UserController from '../controllers/UserController.js'
+import authMiddleware from '../middleware/AuthMiddleware.js'
 
-router.post('/signup', signup)
-router.post('/signin', signin)
-router.get('/auth', authMiddleware, check)
+router.post('/signup', UserController.signup)
+router.post('/signin', UserController.signin)
+router.get('/auth', authMiddleware, UserController.check)
 
 export default router
